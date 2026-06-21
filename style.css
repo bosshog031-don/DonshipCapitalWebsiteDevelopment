@@ -551,9 +551,9 @@ h4 {
   position: relative;
   color: var(--green);
   min-width: 180px;
-  height: 1.15em;
+  height: 1.2em;
   vertical-align: bottom;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .hero-cycle-word {
