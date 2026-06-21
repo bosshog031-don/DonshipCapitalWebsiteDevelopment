@@ -1157,7 +1157,7 @@ h4 {
 
 .pkg-badge {
   position: absolute;
-  top: -12px;
+  top: 16px;
   right: 32px;
   background: linear-gradient(90deg, #1D9E75, #10B981);
   color: var(--white);
