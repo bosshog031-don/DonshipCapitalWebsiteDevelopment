@@ -254,6 +254,17 @@ h4 {
   background: rgba(0, 0, 0, 0.04);
 }
 
+.pkg-cta {
+  color: var(--white);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.pkg-cta:hover {
+  border-color: var(--white);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--white);
+}
+
 .btn-ink {
   background: var(--ink);
   color: var(--white);
