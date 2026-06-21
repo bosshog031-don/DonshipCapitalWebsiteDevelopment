@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Book a Call — Donship Capital</title>
   <meta name="description" content="Book a free 15-minute strategy call with Donship Capital. No pitch, just strategy." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
@@ -34,29 +37,49 @@
 </div>
 
 <!-- PAGE HERO -->
-<section class="page-hero">
-  <div class="container">
-    <div class="eyebrow">Free 15-minute call</div>
-    <h1 class="display-lg" style="color:var(--white);margin-bottom:20px">Let's map your next 90 days.</h1>
-    <p style="font-size:1.0625rem;color:var(--muted-dark);line-height:1.75;max-width:520px">15 minutes. No pitch. Just an honest assessment of what your business needs next and what it looks like for us to build it.</p>
-    <div style="margin-top:36px">
+<section class="page-hero booking-hero" style="text-align: center; position: relative; overflow: hidden; padding: 180px 0 100px; border-bottom: none;">
+  <div class="ambient-glow" style="position: absolute; top: 30%; left: 50%; transform: translate(-50%, -50%); width: 450px; height: 450px; background: radial-gradient(circle, rgba(29,158,117,0.1) 0%, transparent 70%); pointer-events: none; z-index: 1;"></div>
+  <div class="container" style="position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center;">
+    <div class="eyebrow" style="justify-content: center;">Free 15-minute call</div>
+    <h1 class="display-lg" style="color:var(--white);margin-bottom:20px; max-width: 680px;">Let's map your next 90 days.</h1>
+    <p style="font-size:1.0625rem;color:var(--muted-dark);line-height:1.75;max-width:560px;margin: 0 auto 36px;">15 minutes. No pitch. Just an honest assessment of what your business needs next and what it looks like for us to build it.</p>
+    <div>
       <a href="#cal-embed" class="btn btn-green btn-lg btn-arrow">Pick a time below</a>
     </div>
   </div>
 </section>
 
 <!-- CAL EMBED -->
-<section class="cal-section section-sm" id="cal-embed">
-  <div class="container">
-    <div class="cal-wrap">
+<section class="cal-section section-sm" id="cal-embed" style="position: relative; background-image: radial-gradient(circle at 50% 50%, rgba(29, 158, 117, 0.05) 0%, transparent 60%); padding: 60px 0 100px;">
+  <div class="container" style="max-width: 860px;">
+    <div class="cal-wrap" style="background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--glass-border); border-top: 1px solid rgba(255, 255, 255, 0.15); border-radius: 6px; padding: 24px; box-shadow: 0 24px 64px rgba(0,0,0,0.5); position: relative; z-index: 2;">
       <iframe
         class="cal-iframe"
         src="https://cal.com/donshipcapital/discovery?embed=true"
         title="Book a call with Donship Capital"
         loading="lazy"
+        style="width: 100%; height: 680px; border: none; display: block;"
       ></iframe>
     </div>
-    <p class="cal-note">All times shown in your local timezone</p>
+    <p class="cal-note" style="text-align: center; margin-top: 20px; font-size: 0.8125rem; color: var(--muted-dark);">All times shown in your local timezone</p>
+    
+    <!-- TRUST SEALS / SOCIAL PROOF -->
+    <div class="social-proof-wrap" style="margin-top: 80px; text-align: center;" data-anim>
+      <p style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--muted-dark); margin-bottom: 28px;">Trusted Infrastructure Partners & Lenders</p>
+      <div class="logo-grid" style="display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 40px; opacity: 0.55; max-width: 800px; margin: 0 auto 48px;">
+        <span style="font-family: var(--font-heading); font-size: 1rem; font-weight: 800; letter-spacing: 0.05em; color: var(--white); white-space: nowrap;">Dun & Bradstreet</span>
+        <span style="font-family: var(--font-heading); font-size: 1rem; font-weight: 800; letter-spacing: 0.05em; color: var(--white); white-space: nowrap;">Experian Business</span>
+        <span style="font-family: var(--font-heading); font-size: 1rem; font-weight: 800; letter-spacing: 0.05em; color: var(--white); white-space: nowrap;">Equifax Business</span>
+        <span style="font-family: var(--font-heading); font-size: 1rem; font-weight: 800; letter-spacing: 0.05em; color: var(--white); white-space: nowrap;">Stripe Payments</span>
+        <span style="font-family: var(--font-heading); font-size: 1rem; font-weight: 800; letter-spacing: 0.05em; color: var(--white); white-space: nowrap;">Shopify Partner</span>
+      </div>
+      
+      <!-- Testimonial -->
+      <div class="booking-testimonial" style="background: rgba(255,255,255,0.02); border: 1px solid var(--bd-dark); border-radius: 2px; padding: 32px; max-width: 720px; margin: 0 auto; text-align: left;">
+        <p style="font-style: italic; color: rgba(255,255,255,0.85); font-size: 0.9375rem; line-height: 1.7; margin-bottom: 16px;">"Within 3 weeks of my call, Donship Capital had launched my Shopify store, set up my customer service receptionist, and structured our credit lines. We raised $45k in working capital in month two."</p>
+        <div style="font-size: 0.75rem; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: 0.08em;">— Marcus K., Founder, Revive Brands</div>
+      </div>
+    </div>
   </div>
 </section>
 

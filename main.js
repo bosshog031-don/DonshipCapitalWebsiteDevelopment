@@ -2,6 +2,20 @@
 
 (function () {
 
+  // ---- Scroll Progress Bar ----
+  const progressBar = document.createElement('div');
+  progressBar.className = 'scroll-progress';
+  progressBar.id = 'scroll-progress';
+  document.body.appendChild(progressBar);
+
+  const updateProgressBar = () => {
+    const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progressWidth = totalHeight > 0 ? (window.scrollY / totalHeight) * 100 : 0;
+    progressBar.style.width = progressWidth + '%';
+  };
+  window.addEventListener('scroll', updateProgressBar, { passive: true });
+  updateProgressBar();
+
   // ---- Nav: solid on scroll ----
   const nav = document.querySelector('.nav');
   if (nav) {
@@ -42,7 +56,22 @@
   if (animEls.length && 'IntersectionObserver' in window) {
     const io = new IntersectionObserver((entries) => {
       entries.forEach(e => {
-        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+        if (e.isIntersecting) {
+          const el = e.target;
+          el.classList.add('in');
+          
+          // Stagger children if any exist inside this animated section
+          const children = el.querySelectorAll('.row-item, .pkg-card, .stat-item, .product-card, .book-step');
+          if (children.length) {
+            children.forEach((child, i) => {
+              setTimeout(() => {
+                child.classList.add('in');
+              }, i * 90);
+            });
+          }
+          
+          io.unobserve(el);
+        }
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
     animEls.forEach(el => io.observe(el));
@@ -195,5 +224,196 @@
       });
     }
   })();
+
+  // ---- Hero: Word Swapper ----
+  const cycleWordEl = document.getElementById('hero-cycle-word');
+  if (cycleWordEl) {
+    const words = ['Fund', 'Build', 'Scale', 'Automate'];
+    let index = 0;
+    setInterval(() => {
+      cycleWordEl.classList.add('exit');
+      setTimeout(() => {
+        index = (index + 1) % words.length;
+        cycleWordEl.textContent = words[index];
+        cycleWordEl.classList.remove('exit');
+        cycleWordEl.classList.add('active');
+      }, 400);
+    }, 3000);
+  }
+
+  // ---- Hero: Interactive Canvas Background ----
+  const canvas = document.getElementById('hero-canvas');
+  if (canvas) {
+    const ctx = canvas.getContext('2d');
+    let width = canvas.width = canvas.offsetWidth;
+    let height = canvas.height = canvas.offsetHeight;
+    
+    let mouse = { x: -1000, y: -1000 };
+    window.addEventListener('mousemove', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    }, { passive: true });
+    
+    window.addEventListener('mouseleave', () => {
+      mouse.x = -1000;
+      mouse.y = -1000;
+    });
+    
+    window.addEventListener('resize', () => {
+      width = canvas.width = canvas.offsetWidth;
+      height = canvas.height = canvas.offsetHeight;
+      initGrid();
+    });
+
+    let dots = [];
+    const spacing = 45;
+    
+    function initGrid() {
+      dots = [];
+      for (let x = spacing / 2; x < width; x += spacing) {
+        for (let y = spacing / 2; y < height; y += spacing) {
+          dots.push({ x, y, ox: x, oy: y });
+        }
+      }
+    }
+    
+    initGrid();
+    
+    let active = true;
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver((entries) => {
+        active = entries[0].isIntersecting;
+      }, { threshold: 0.01 });
+      observer.observe(canvas);
+    }
+    
+    function animate() {
+      if (active) {
+        ctx.clearRect(0, 0, width, height);
+        
+        for (let i = 0; i < dots.length; i++) {
+          const d = dots[i];
+          const dx = mouse.x - d.x;
+          const dy = mouse.y - d.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          
+          if (dist < 120) {
+            const force = (120 - dist) / 120;
+            const angle = Math.atan2(dy, dx);
+            d.x = d.ox - Math.cos(angle) * force * 15;
+            d.y = d.oy - Math.sin(angle) * force * 15;
+            ctx.fillStyle = `rgba(29, 158, 117, ${0.2 + force * 0.45})`;
+          } else {
+            d.x += (d.ox - d.x) * 0.1;
+            d.y += (d.oy - d.y) * 0.1;
+            ctx.fillStyle = 'rgba(29, 158, 117, 0.2)';
+          }
+          
+          ctx.beginPath();
+          ctx.arc(d.x, d.y, 1.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+    animate();
+  }
+
+  // ---- Cursor Glow Spotlight ----
+  if (window.matchMedia('(pointer: fine)').matches) {
+    window.addEventListener('mousemove', (e) => {
+      document.documentElement.style.setProperty('--cursor-x', e.clientX + 'px');
+      document.documentElement.style.setProperty('--cursor-y', e.clientY + 'px');
+    }, { passive: true });
+  }
+
+  // ---- Button Press Ripple Effect ----
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.btn');
+    if (btn) {
+      const rect = btn.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height);
+      const x = e.clientX - rect.left - size / 2;
+      const y = e.clientY - rect.top - size / 2;
+      
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      ripple.style.width = ripple.style.height = `${size}px`;
+      ripple.style.left = `${x}px`;
+      ripple.style.top = `${y}px`;
+      
+      btn.appendChild(ripple);
+      
+      ripple.addEventListener('animationend', () => {
+        ripple.remove();
+      });
+    }
+  });
+
+  // ---- Page Transition Overlay ----
+  const transitionOverlay = document.createElement('div');
+  transitionOverlay.style.cssText = `
+    position: fixed;
+    inset: 0;
+    background: var(--ink);
+    z-index: 10000;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    opacity: 1;
+  `;
+  document.body.appendChild(transitionOverlay);
+
+  // Fade in page on load
+  const fadeInPage = () => {
+    setTimeout(() => {
+      transitionOverlay.style.opacity = '0';
+    }, 40);
+  };
+  
+  if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', fadeInPage);
+  } else {
+    fadeInPage();
+  }
+
+  // Intercept internal link clicks to fade out before loading
+  document.addEventListener('click', (e) => {
+    const anchor = e.target.closest('a');
+    if (anchor && anchor.hostname === window.location.hostname && !anchor.hash) {
+      const href = anchor.getAttribute('href');
+      if (href && !href.startsWith('#') && anchor.target !== '_blank' && !e.metaKey && !e.ctrlKey) {
+        e.preventDefault();
+        transitionOverlay.style.opacity = '1';
+        setTimeout(() => {
+          window.location.href = href;
+        }, 280);
+      }
+    }
+  });
+
+  // ---- 3D Card Tilt Effect ----
+  const tiltCards = document.querySelectorAll('.product-card');
+  tiltCards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const xc = rect.width / 2;
+      const yc = rect.height / 2;
+      
+      const rx = ((yc - y) / yc) * 8; // max 8 degrees tilt
+      const ry = ((x - xc) / xc) * 8;
+      
+      card.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-5px)`;
+    }, { passive: true });
+    
+    card.style.transition = 'transform 0.15s ease-out, border-color var(--t), box-shadow var(--t)';
+    
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)';
+    });
+  });
 
 })();
